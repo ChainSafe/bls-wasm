@@ -24,7 +24,7 @@ import wasmCode from './bls_c.wasm';
     const BLS_SECRETKEY_SIZE = MCLBN_FP_UNIT_SIZE * 8
     const BLS_PUBLICKEY_SIZE = BLS_SECRETKEY_SIZE * 3
     const BLS_SIGNATURE_SIZE = BLS_SECRETKEY_SIZE * 3 * 2
-    const MSG_SIZE = 40
+    const MSG_SIZE = 32
     exports.MSG_SIZE = MSG_SIZE
 
     const _malloc = size => {
