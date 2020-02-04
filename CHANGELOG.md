@@ -1,5 +1,11 @@
 # CHANGELOG.md
 
+## 0.3.1 (unreleased)
+
+Bugfixes:
+ - set eth mode after bls init
+ - set msg size constant to 32 down from 40 (msg + domain)
+  
 ## 0.3.0 (2020-02-03)
 
 Features:

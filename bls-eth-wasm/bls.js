@@ -178,10 +178,11 @@ import wasmCode from './bls_c.wasm';
 
     // change curveType
     exports.blsInit = () => {
-      //use new spec
-      mod._blsSetETHmode(1);
       const r = mod._blsInit(exports.BLS12_381, MCLBN_COMPILED_TIME_VAR)
-      if (r) throw ('blsInit err ' + r)
+      if (r) throw new Error('blsInit err ' + r)
+      //use new spec
+      const r2 = mod._blsSetETHmode(1);
+      if (r2) throw new Error('blsSetEthMode err ' + r2)
     }
     exports.getCurveOrder = _wrapGetStr(mod._blsGetCurveOrder)
     exports.getFieldOrder = _wrapGetStr(mod._blsGetFieldOrder)
