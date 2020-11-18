@@ -1,12 +1,13 @@
 {
-  "name": "@chainsafe/eth2-bls-wasm",
-  "version": "0.5.0",
+  "name": "@bitgo/eth2-bls-wasm",
+  "version": "0.1.0",
   "description": "BLS signature by WebAssembly",
   "main": "./dist/bls.js",
   "types": "./dist/bls.d.ts",
   "contributors": [
     "herumi <herumi@nifty.com> (https://github.com/herumi/)",
-    "Chainsafe Systems"
+    "Chainsafe Systems",
+    "BitGo Inc."
   ],
   "files": [
     "dist"
@@ -20,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:ChainSafe/eth2-bls-wasm.git"
+    "url": "git@github.com:BitGo/eth2-bls-wasm.git"
   },
   "keywords": [
     "BLS signature",
@@ -30,12 +31,12 @@
   "author": "herumi <herumi@nifty.com> (https://github.com/herumi/)",
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "git@github.com:ChainSafe/eth2-bls-wasm/issues"
+    "url": "git@github.com:BitGo/eth2-bls-wasm/issues"
   },
   "engines": {
     "node": ">=8.9.0"
   },
-  "homepage": "git@github.com:ChainSafe/eth2-bls-wasm#readme",
+  "homepage": "git@github.com:BitGo/eth2-bls-wasm#readme",
   "devDependencies": {
     "@babel/cli": "^7.7.5",
     "@babel/core": "^7.7.5",
