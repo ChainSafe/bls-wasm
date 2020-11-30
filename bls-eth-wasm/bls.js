@@ -582,11 +582,10 @@ import wasmCode from './bls_c.wasm';
   }
   exports.init = () => {
     exports.curveType = exports.BLS12_381
-    const name = 'bls_c'
     return new Promise(resolve => {
       const wasmBinary = Buffer.from(wasmCode, "binary");
       try {
-        const js = require("./".concat(name, ".js"));
+        const js = require('./bls_c.js');
 
         const Module = {
           cryptoGetRandomValues: _cryptoGetRandomValues,
