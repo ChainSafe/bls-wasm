@@ -1,3 +1,7 @@
 dist
 node_modules
 .idea
+
+# EMCC build files
+bls-eth-wasm/bls_c.js
+bls-eth-wasm/bls_c.wasm

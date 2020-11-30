@@ -12,6 +12,7 @@ const curveTest = (curveType, name) => {
         serializeTest()
         serializeUncompressedTest()
         signatureTest()
+        multiVerifyTest()
         console.log('all ok')
       } catch (e) {
         console.log(e)
@@ -254,4 +255,39 @@ function aggTest () {
     aggSig.add(sigVec[i])
   }
   assert(aggSig.verifyAggregatedHashWithDomain(pubVec, msgVec))
+}
+
+function multiVerifyTestOne(n) {
+  const msgSize = 32
+  const pubs = []
+  const sigs = []
+  const msgs = []
+  const sec = new bls.SecretKey()
+  for (let i = 0; i < n; i++) {
+    sec.setByCSPRNG()
+    pubs.push(sec.getPublicKey())
+    const msg = new Uint8Array(32)
+    bls.getRandomValues(msg)
+    msgs.push(msg)
+    sigs.push(sec.sign(msg))
+  }
+  assert(bls.multiVerify(pubs, sigs, msgs))
+  if (n == 50) {
+    bench('multiVerify', 10, () => bls.multiVerify(pubs, sigs, msgs))
+    bench('normal verify', 10, () => {
+      for (let i = 0; i < n; i++) {
+        pubs[i].verify(sigs[i], msgs[i])
+      }
+    })
+  }
+  msgs[0][0]++
+  assert(!bls.multiVerify(pubs, sigs, msgs))
+}
+
+function multiVerifyTest() {
+  const tbl = [1, 2, 15, 16, 17, 30, 31, 32, 33, 50, 400]
+  tbl.forEach((n) => {
+    console.log(`multiVerifyTestOne ${n}`)
+    multiVerifyTestOne(n)
+  })
 }
