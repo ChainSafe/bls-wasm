@@ -1,65 +1,38 @@
 declare class Common {
-
     constructor(size: number);
 
     deserializeHexStr(s: string): void;
-
     serializeToHexStr(): string;
-
     dump(msg?: string): string;
-
     clear(): void;
-
     clone(): this;
-
     isEqual(rhs: this): boolean
-
     deserialize(v: Uint8Array): void;
-
     serialize(): Uint8Array;
-
     add(rhs: this): void;
 }
 
 declare class SecretKeyType extends Common {
-
     constructor();
 
     setInt(x: number): void;
-
+    isZero(): boolean;
     setHashOf(a: Uint8Array): void;
-
     setLittleEndian(a: Uint8Array): void;
-
+    setLittleEndianMod(a: Uint8Array): void;
     setByCSPRNG(): void;
-
     getPublicKey(): PublicKeyType;
-
     sign(m: string | Uint8Array): SignatureType;
-
-    /**
-     *
-     * @param m must have 40 bytes
-     */
-    signHashWithDomain(m: Uint8Array): SignatureType;
 }
 
 declare class PublicKeyType extends Common {
-
     constructor();
 
-    verify(signature: SignatureType, m: Uint8Array | string): boolean;
-    isValidOrder(): boolean;
+    isZero(): boolean;
     deserializeUncompressed (s: Uint8Array): void;
     serializeUncompressed (): Uint8Array;
-    deserializeUncompressedHexStr (s:string): void;
-    serializeUncompressedToHexStr(): string;
-    /**
-     *
-     * @param signature
-     * @param m must have 40 bytes
-     */
-    verifyHashWithDomain(signature: SignatureType, m: Uint8Array): boolean;
+    isValidOrder(): boolean;
+    verify(signature: SignatureType, m: Uint8Array | string): boolean;
 }
 
 declare class SignatureType extends Common {
@@ -67,26 +40,23 @@ declare class SignatureType extends Common {
 
     deserializeUncompressed (s: Uint8Array): void;
     serializeUncompressed (): Uint8Array;
-    deserializeUncompressedHexStr (s:string): void;
-    serializeUncompressedToHexStr(): string;
     isValidOrder(): boolean;
     aggregate(others: SignatureType[]): boolean;
-    aggregateVerifyNoCheck(publicKeys: PublicKeyType[], messages: Uint8Array): boolean;
     fastAggregateVerify(publicKeys: PublicKeyType[], message: Uint8Array): boolean;
-    /**
-     *
-     * @param publicKeys
-     * @param messages each message must have 40bytes
-     */
-    verifyAggregatedHashWithDomain(publicKeys: PublicKeyType[], messages: Uint8Array[]): boolean
-
+    aggregateVerifyNoCheck(publicKeys: PublicKeyType[], messages: Uint8Array): boolean;
 }
 
-export function init(): Promise<void>;
+export function init(curveType: CurveType): Promise<void>;
+export function blsInit(curveType: CurveType): Promise<void>;
+export function setETHmode(mode: EthMode): void;
 
 export function toHex(a: Uint8Array, start: number, length: number): string;
 export function toHexStr(a: Uint8Array): string;
 export function fromHexStr(s: string): Uint8Array;
+export function deserializeHexStrToSecretKey(s: string): SecretKeyType;
+export function deserializeHexStrToPublicKey(s: string): PublicKeyType;
+export function deserializeHexStrToSignature(s: string): SignatureType;
+
 export function getCurveOrder(): string;
 export function getFieldOrder(): string;
 export function verifySignatureOrder(doVerify: boolean): void;
@@ -98,12 +68,33 @@ export function verifyPublicKeyOrder(doVerify: boolean): void;
  * @param msgSize defaults to MSG_SIZE
  */
 export function areAllMsgDifferent(msgs: Uint8Array, msgSize?: number): boolean;
-export function shouldVerifyBlsSignatureOrder(b: string): void;
-export function shouldVerifyBlsPublicKeyOrder(b: string): void;
-export function deserializeHexStrToSecretKey(s: string): SecretKeyType;
-export function deserializeHexStrToPublicKey(s: string): PublicKeyType;
-export function deserializeHexStrToSignature(s: string): SignatureType;
+
+/**
+ * return true if all pub[i].verify(sigs[i], msgs[i])
+ * @param msgs msgs is array of 32-byte Uint8Array
+ */
+export function multiVerify(pubs: PublicKeyType[], sigs: SignatureType[], msgs: Uint8Array[]): boolean;
 
 export const SecretKey: typeof SecretKeyType;
 export const PublicKey: typeof PublicKeyType;
 export const Signature: typeof SignatureType;
+
+export enum EthMode {
+    DRAFT_05 = 1,
+    DRAFT_06 = 2,
+    DRAFT_07 = 3,
+}
+
+export enum CurveType {
+    BN254 = 0,
+    BN381_1 = 1,
+    BLS12_381 = 5,
+}
+
+export const BN254 = CurveType.BN254;
+export const BN381_1 = CurveType.BN381_1;
+export const BLS12_381 = CurveType.BLS12_381;
+export const ethMode = true;
+export const ETH_MODE_DRAFT_05 = EthMode.DRAFT_05;
+export const ETH_MODE_DRAFT_06 = EthMode.DRAFT_06;
+export const ETH_MODE_DRAFT_07 = EthMode.DRAFT_07;

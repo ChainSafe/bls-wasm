@@ -1,6 +1,13 @@
-bls-demo.html
-bls-demo.js
 .nyc_output/
+.vscode/
 coverage/
-t.js
-.travis.yml
+
+# herumi/bls-eth-wasm artifacts
+dist/.travis.yml
+dist/bench.js
+dist/bls-demo.html
+dist/bls-demo.js
+dist/package.json
+dist/readme.md
+dist/test.js
+dist/test/
